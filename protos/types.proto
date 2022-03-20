@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package cac2o4.types;
+option csharp_namespace = "CaC2O4.Types";
+
+
+message Empty {}
+
+message Uuid {
+  bytes id = 1;
+}
+
+message Date {
+  int32 ZipedDate = 1;
+}

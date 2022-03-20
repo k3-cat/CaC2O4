@@ -1,0 +1,176 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "types.proto";
+import "repositories.proto";
+import "services/common.proto";
+
+package cac2o4.services.record;
+option csharp_namespace = "CaC2O4.Services.Record";
+
+
+service IRecordService {
+  rpc AccessDoc (types.Uuid) returns (UrlRsn);
+  rpc ListDocs (ListDocsReq) returns (stream DocBrief);
+  rpc AllocateDoc (AllocateDocReq) returns (types.Empty);
+  rpc MarkDocForEdit (types.Uuid) returns (types.Empty);
+  rpc RemoveDoc (types.Uuid) returns (types.Empty);
+  rpc FinalizeEdit (FinalizeEditReq) returns (types.Empty);
+
+  rpc GetVehicle (types.Uuid) returns (VehicleDetail);
+  rpc SearchVehicles (SearchVehicleReq) returns (stream VehicleBrief);
+  rpc AddVehicle (AddVehicleReq) returns (types.Empty);
+  rpc RemoveVehicle (types.Uuid) returns (types.Empty);
+
+  rpc GetEmployee (types.Uuid) returns (EmployeeDetail);
+  rpc SearchEmployees (SearchEmployeeReq) returns (stream EmployeeBrief);
+  rpc AddEmployee (AddEmployeeReq) returns (types.Empty);
+  rpc RemoveEmployee (types.Uuid) returns (types.Empty);
+
+  rpc GetContract (types.Uuid) returns (ContractDetail);
+  rpc ListContract (ListContractsReq) returns (stream ContractBrief);
+  rpc SignContract (SignContractReq) returns (types.Empty);
+  rpc RescindContract (types.Uuid) returns (types.Empty);
+}
+
+message ListDocsReq {
+  repositories.DocSubject Subject = 1;
+  bytes SubjectId = 2;
+}
+
+message DocBrief {
+  bytes Id = 1;
+  string Title = 2;
+  repositories.FileState State = 3;
+
+  string Log = 98;
+  google.protobuf.Timestamp Timestamp = 99;
+}
+
+message AllocateDocReq {
+  repositories.DocSubject Subject = 1;
+  bytes SubjectId = 2;
+  string For = 3;
+  string Title = 4;
+}
+
+message FinalizeEditReq {
+  bytes Id = 1;
+  string UploadKey = 2;
+  string NewRecord = 3;
+}
+
+
+message VehicleBrief {
+  bytes Id = 1;
+  uint32 LogicId = 2;
+  string NumberPlate = 3;
+}
+
+message VehicleDetail {
+  bytes Id = 1;
+  uint32 LogicId = 2;
+
+  string NumberPlate = 3; // 车
+  string Model = 4;
+  string Vin = 5;
+  string EngineNo = 6;
+  repositories.FuelType FuelType = 7;
+  types.Date RegisterDate = 8; // 注册时间
+  string Usci = 9; // 统一社会信用代码
+  string LicenseNo = 10; // 经营
+  string BusinessName = 11;
+  types.Date TransportPermitExpireAt = 12;
+  types.Date BusinessLicenseExpireAt = 13;
+  uint32 RecordNo = 14; // 备案证号
+  bytes OwnerId = 15;
+
+  string Log = 98;
+  google.protobuf.Timestamp Timestamp = 99;
+}
+
+message SearchVehicleReq {
+  reserved 1;
+  string Query = 2;
+}
+
+message AddVehicleReq {
+  uint32 VehicleId = 1;
+}
+
+
+message EmployeeBrief {
+  bytes Id = 1;
+  uint32 LogicId = 2;
+  string Name = 3;
+}
+
+message EmployeeDetail {
+  bytes Id = 1;
+  uint32 LogicId = 2;
+
+  string Tin = 3; // 身份证号
+  string Name = 4;
+  string Gender= 5;
+  string Ethnicity = 6; // 民族
+  types.Date Dob = 7;
+  string Address = 8;
+  string Household = 9; // 户口所在地
+  string CertificateNo = 10; // 资格证号
+  types.Date SCardExpireAt = 11; // 服务监督卡 小卡 有效期
+  uint32 RecordNo = 12; // 备案证号
+
+  string Phone = 13;
+  string EducationLevel = 14;
+
+  string Log = 98;
+  google.protobuf.Timestamp Timestamp = 99;
+}
+
+message SearchEmployeeReq {
+  enum By {
+    Index = 0;
+    Name = 1;
+    Phone = 2;
+  };
+  By SearchBy = 1;
+  string Query = 2;
+}
+
+message AddEmployeeReq {
+  uint32 EmployeeId = 1;
+}
+
+
+enum ContractSubject {
+  Other = 0;
+  Vehicle = 1;
+  Employee = 2;
+}
+
+message ListContractsReq {
+  ContractSubject Subject = 1;
+  bytes SubjectId = 2;
+}
+
+message ContractBrief {
+  bytes Id = 1;
+  bytes SubjectId = 2;
+  string Hint = 3;
+}
+
+message ContractDetail{
+  bytes Id = 1;
+  bytes VehicleId = 2;
+  bytes EmployeeId = 3;
+
+  string Log = 98;
+  google.protobuf.Timestamp Timestamp = 99;
+}
+
+message SignContractReq {
+  ContractSubject Subject = 1;
+  bytes SubjectId = 2;
+  int32 Target = 3;
+  bool IsOwner = 4;
+}

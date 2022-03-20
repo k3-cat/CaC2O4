@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "types.proto";
+import "repositories.proto";
+import "services/common.proto";
+
+package cac2o4.services.office;
+option csharp_namespace = "CaC2O4.Services.Office";
+
+
+service IOfficeService {
+  rpc AccessPaper (types.Uuid) returns (UrlRsn);
+  rpc ListPapersByVehicle (types.Uuid) returns (stream PaperBrief);
+  rpc GeneratePaper (GeneratePaperReq) returns (types.Empty);
+  rpc FinalizePaper (FinalizePaperReq) returns (types.Empty);
+}
+
+message PaperBrief {
+  bytes Id = 1;
+  uint32 SerialNo = 2;
+  string Title = 3;
+  repositories.FileState State = 4;
+  google.protobuf.Timestamp Timestamp = 5;
+}
+
+message GeneratePaperReq {
+  bytes VehicleId = 1;
+  reserved 2;
+  string Title = 3;
+}
+
+message FinalizePaperReq {
+  bytes Id = 1;
+  string UploadKey = 2;
+}

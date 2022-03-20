@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+import "repositories.proto";
+
+package cac2o4.services.auth;
+option csharp_namespace = "CaC2O4.Services.Auth";
+
+
+service IAuthenticationService {
+  rpc Login (LoginReq) returns (TokenRes);
+  rpc RefreshToken (RefreshTokenReq) returns (TokenRes);
+}
+
+message TokenRes {
+  string AccessToken = 1;
+  string RefreshToken = 2;
+  google.protobuf.Timestamp ExpireAt = 3;
+  cac2o4.repositories.UserAcl Acl = 4;
+}
+
+message LoginReq {
+  string Username = 1;
+  string Password = 2;
+}
+
+message RefreshTokenReq {
+  string RefreshToken = 1;
+}

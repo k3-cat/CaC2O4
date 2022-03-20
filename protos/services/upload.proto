@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "types.proto";
+
+package cac2o4.services.upload;
+option csharp_namespace = "CaC2O4.Services.Upload";
+
+
+service IUploadService {
+  rpc AllocateNewUpload(types.Empty) returns (UploadInfo);
+}
+
+message UploadInfo {
+  string Key = 1;
+  string Url = 2;
+  string CallbackUrl = 3;
+  string CallbackBody = 4;
+}

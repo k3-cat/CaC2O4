@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package cac2o4.repositories;
+option csharp_namespace = "CaC2O4.Repositories";
+
+
+enum UserAcl {
+  FORBIDDEN = 0;
+  Staff = 10;
+  Archivist = 11;
+  Admin = 20;
+  Supvr = 90;
+  Super = 99;
+}
+
+enum FuelType {
+  UnknowType = 0;
+  Electric = 1;
+  HybridCng = 2;
+  HybridElectric = 3;
+}
+
+enum DocSubject {
+  NotApplicable = 0;
+  Vehicle = 1;
+  Employee = 2;
+  Contract = 3;
+}
+
+enum FileState {
+  Unavailable = 0;
+  Blank = 1;
+  Current = 10;
+  Editing = 11;
+  Archived = 99;
+}

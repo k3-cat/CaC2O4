@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package cac2o4.services;
+option csharp_namespace = "CaC2O4.Services";
+
+
+message UrlRsn {
+  string Url = 1;
+}

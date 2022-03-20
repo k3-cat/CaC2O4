@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "types.proto";
+import "repositories.proto";
+
+package cac2o4.services.admin;
+option csharp_namespace = "CaC2O4.Services.Admin";
+
+
+service IAdminService {
+  rpc GetUser (types.Uuid) returns (UserDetail);
+  rpc ListAllUsers (types.Empty) returns (stream UserDetail);
+  rpc AddUser (AddUserReq) returns (types.Empty);
+  rpc AssignAcl (AssignAclReq) returns (types.Empty);
+  rpc DeleteUser (types.Uuid) returns (types.Empty);
+}
+
+message UserDetail {
+  bytes Id = 1;
+  string Name = 2;
+  string Phone = 3;
+  cac2o4.repositories.UserAcl Acl = 4;
+}
+
+message AddUserReq {
+  string Name = 2;
+  string Phone = 3;
+  cac2o4.repositories.UserAcl Acl = 4;
+}
+
+message AssignAclReq {
+  bytes Id = 1;
+  cac2o4.repositories.UserAcl Acl = 2;
+}
